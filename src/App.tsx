@@ -1,35 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import useFetch from './components/useFetch';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+
+  const { data, loading, error } = useFetch({
+    url: "https://api.open-meteo.com/v1/forecast",
+    options: {
+      latitude: 18.67,
+      longitude: 10.65,
+      hourly: ["temperature_2m", "weather_code"]
+    }
+  })
+
+  const getDescription = (weatherCode: number): string => {
+    const status: { [key: number]: string } = {
+      0: "Clear Sky",
+      1: "Mainly clear, partly cloudly and overcast",
+      2: "Mainly clear, partly cloudly and overcast",
+      3: "Mainly clear, partly cloudly and overcast"
+    }
+    return status[weatherCode] || "Unknow status";
+  }
+
+  const temperature = data?.hourly?.temperature_2m?.[0]
+  const weather_code = data?.hourly?.weather_code?.[0]
+  const weather_status = weather_code !== undefined ? getDescription(weather_code) : '';
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className='flex flex-col items-center justify-center bg-linear-to-r from-blue-200 to-blue-400 h-screen text-center'>
+      <div className='text-white text-shadow-md'>
+        <h1 className='text-2xl'>Oldenburg</h1>
+        <p className='text-5xl'>{temperature}</p>
+        <p className=''>{weather_status}</p>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      <div className='bg-gray-100/20 rounded-md' >
+
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   )
 }
 
+//flow fields
 export default App
