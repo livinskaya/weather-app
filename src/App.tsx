@@ -1,5 +1,6 @@
 import './App.css'
 import useFetch from './components/useFetch';
+import { getDescription } from './components/getDescription';
 
 const App = () => {
 
@@ -11,16 +12,6 @@ const App = () => {
       hourly: ["temperature_2m", "weather_code"]
     }
   })
-
-  const getDescription = (weatherCode: number): string => {
-    const status: { [key: number]: string } = {
-      0: "Clear Sky",
-      1: "Mainly clear, partly cloudly and overcast",
-      2: "Mainly clear, partly cloudly and overcast",
-      3: "Mainly clear, partly cloudly and overcast"
-    }
-    return status[weatherCode] || "Unknow status";
-  }
 
   const temperature = data?.hourly?.temperature_2m?.[0]
   const weather_code = data?.hourly?.weather_code?.[0]
@@ -37,7 +28,7 @@ const App = () => {
   if (error) {
     return (
       <div className='flex flex-col items-center justify-center bg-linear-to-r from-red-200 to-red-400 h-screen text-center'>
-        <h1 className='text-3xl text-white'>{error.message}
+        <h1 className='text-3xl text-white'>error.message
         </h1>
       </div>
     )
