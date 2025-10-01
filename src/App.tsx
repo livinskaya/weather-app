@@ -26,6 +26,23 @@ const App = () => {
   const weather_code = data?.hourly?.weather_code?.[0]
   const weather_status = weather_code !== undefined ? getDescription(weather_code) : '';
 
+  if (loading) {
+    return (
+      <div className='flex flex-col items-center justify-center bg-linear-to-r from-blue-200 to-blue-400 h-screen text-center'>
+        <h1 className='text-3xl text-white'>Loading...</h1>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className='flex flex-col items-center justify-center bg-linear-to-r from-red-200 to-red-400 h-screen text-center'>
+        <h1 className='text-3xl text-white'>{error.message}
+        </h1>
+      </div>
+    )
+  }
+
   return (
     <div className='flex flex-col items-center justify-center bg-linear-to-r from-blue-200 to-blue-400 h-screen text-center'>
       <div className='text-white text-shadow-md'>
