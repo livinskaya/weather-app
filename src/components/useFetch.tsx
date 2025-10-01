@@ -13,6 +13,10 @@ interface FetchProps {
 }
 
 interface WeatherData {
+    current: {
+        temperature_2m: number;
+        weather_code: number;
+    }
     hourly: {
         temperature_2m: number[];
         weather_code: number[];
@@ -20,18 +24,25 @@ interface WeatherData {
 }
 
 
-const useFetch = ({ url, options }: FetchProps) => {
+const useFetch = (props: FetchProps | null) => {
     const [data, setData] = useState<WeatherData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<unknown>(null)
-    const hourlyParams = options.hourly.join(',');
 
     useEffect(() => {
+        if (!props) return;
+
+        const { url, options } = props;
+        const hourlyParams = options.hourly.join(",");
+        const currentParams = "temperature_2m,weather_code";
+
         const getData = async () => {
             setLoading(true);
             setError(undefined);
             try {
-                const response = await fetch(`${url}?latitude=${options.latitude}&longitude=${options.longitude}&hourly=${hourlyParams}`)
+                const response = await fetch(`${url}?latitude=${options.latitude}&longitude=${options.longitude}&hourly=${hourlyParams}&current=${currentParams}`)
+
+                console.log(response)
 
                 if (!response.ok) {
                     throw new Error(`Error: ${response.status}`)
@@ -46,7 +57,7 @@ const useFetch = ({ url, options }: FetchProps) => {
 
         };
         getData();
-    }, [url, options.latitude, options.longitude, hourlyParams])
+    }, [props])
 
     return { data, loading, error }
 }
