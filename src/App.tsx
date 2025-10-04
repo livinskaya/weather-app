@@ -45,7 +45,6 @@ const App = () => {
         <p className=''>{weather_status}</p>
       </div>
       <div className='bg-gray-100/20 rounded-md' >
-
       </div>
     </div>
   )
