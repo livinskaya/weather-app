@@ -18,6 +18,7 @@ interface WeatherData {
         weather_code: number;
     }
     hourly: {
+        time: string[];
         temperature_2m: number[];
         weather_code: number[];
     }

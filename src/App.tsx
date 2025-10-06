@@ -44,7 +44,20 @@ const App = () => {
         <p className='text-5xl'>{temperature}</p>
         <p className=''>{weather_status}</p>
       </div>
-      <div className='bg-gray-100/20 rounded-md' >
+      <div className='flex w-125 bg-gray-100/20 rounded-md overflow-x-scroll m-5 p-5' >
+        {data?.hourly.time?.map((time: string, index: number) => (
+          <div
+            key={time}
+            className="inline-block flex-shrink-0 w-[50px] text-center"
+          >
+            <p className='text-sm text-white'>
+              {new Date(time).getHours()}:00
+            </p>
+            <p className='text-lg text-white'>
+              {Math.round(data.hourly.temperature_2m[index])}
+            </p>
+          </div>
+        ))}
       </div>
     </div>
   )
