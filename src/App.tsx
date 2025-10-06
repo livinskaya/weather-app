@@ -51,7 +51,7 @@ const App = () => {
             className="inline-block flex-shrink-0 w-[50px] text-center"
           >
             <p className='text-sm text-white'>
-              {new Date(time).getHours()}:00
+              {index === 0 ? 'Now' : new Date(time).getHours()}:00
             </p>
             <p className='text-lg text-white'>
               {Math.round(data.hourly.temperature_2m[index])}
