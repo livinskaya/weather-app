@@ -29,7 +29,7 @@ const App = () => {
         options: {
           latitude: location.latitude,
           longitude: location.longitude,
-          hourly: ["temperature_2m", "wseather_code"]
+          hourly: ["temperature_2m", "weather_code"]
         },
       }
       : null
