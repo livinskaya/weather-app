@@ -12,21 +12,10 @@ interface FetchProps {
     options: RequestParams;
 }
 
-interface WeatherData {
-    current: {
-        temperature_2m: number;
-        weather_code: number;
-    }
-    hourly: {
-        time: string[];
-        temperature_2m: number[];
-        weather_code: number[];
-    }
-}
 
 
-const useFetch = (props: FetchProps | null) => {
-    const [data, setData] = useState<WeatherData | null>(null);
+const useFetch = <T,>(props: FetchProps | null) => {
+    const [data, setData] = useState<T | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<unknown>(null)
 
@@ -48,7 +37,7 @@ const useFetch = (props: FetchProps | null) => {
                 if (!response.ok) {
                     throw new Error(`Error: ${response.status}`)
                 }
-                const enddata = await response.json();
+                const enddata: T = await response.json();
                 setData(enddata)
             } catch (error: unknown) {
                 setError(error);
