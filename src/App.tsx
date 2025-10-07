@@ -3,6 +3,8 @@ import useFetch from './components/useFetch';
 import { getDescription } from './components/getDescription';
 import { getCurrentLocation } from './components/getCurrentLocation';
 import { useEffect, useState } from 'react';
+import { StateLoading } from './components/stateLoading';
+import { StateError } from './components/stateError';
 
 interface Location {
   latitude: number;
@@ -27,7 +29,7 @@ const App = () => {
         options: {
           latitude: location.latitude,
           longitude: location.longitude,
-          hourly: ["temperature_2m", "weather_code"]
+          hourly: ["temperature_2m", "wseather_code"]
         },
       }
       : null
@@ -36,6 +38,18 @@ const App = () => {
   const temperature = data?.current.temperature_2m
   const get_currentWeather = data?.current.weather_code
   const currentWeather = get_currentWeather !== undefined ? getDescription(get_currentWeather) : null;
+
+  if (loading) {
+    return (
+      <StateLoading />
+    )
+  }
+
+  if (error) {
+    return (
+      <StateError />
+    )
+  }
 
   return (
 
