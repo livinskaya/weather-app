@@ -34,32 +34,39 @@ const App = () => {
   );
 
   const temperature = data?.current.temperature_2m
-  const weather_code = data?.current.weather_code
-  const weather_status = weather_code !== undefined ? getDescription(weather_code) : '';
+  const get_currentWeather = data?.current.weather_code
+  const currentWeather = get_currentWeather !== undefined ? getDescription(get_currentWeather) : null;
 
   return (
+
     <div className='flex flex-col items-center justify-center bg-linear-to-r from-blue-200 to-blue-400 h-screen text-center'>
       <div className='text-white text-shadow-md'>
         <h1 className='text-2xl'>Oldenburg</h1>
         <p className='text-5xl'>{temperature}</p>
-        <p className=''>{weather_status}</p>
+        <p className=''>{currentWeather?.text}</p>
       </div>
-      <div className='flex w-125 bg-gray-100/20 rounded-md overflow-x-scroll m-5 p-5' >
-        {data?.hourly.time?.map((time: string, index: number) => (
-          <div
-            key={time}
-            className="inline-block flex-shrink-0 w-[50px] text-center"
-          >
-            <p className='text-sm text-white'>
-              {index === 0 ? 'Now' : new Date(time).getHours()}:00
-            </p>
-            <p className='text-lg text-white'>
-              {Math.round(data.hourly.temperature_2m[index])}
-            </p>
-          </div>
-        ))}
+      <div className='flex w-125 bg-gray-100/20 rounded-[20px] overflow-x-scroll m-5 p-5' >
+        {data?.hourly.time?.slice(0, 12).map((time: string, index: number) => {
+          const todayWeather = getDescription(data?.hourly.weather_code[index])
+
+          return (
+            < div
+              key={time}
+              className="inline-block flex-shrink-0 w-[50px] text-center mr-5"
+            >
+              <p className='text-sm text-white'>
+                {index === 0 ? 'Now' : new Date(time).getHours() + ' Uhr'}
+              </p>
+              <p>{todayWeather.icon}</p>
+
+              <p className='text-lg text-white'>
+                {Math.round(data.hourly.temperature_2m[index])}
+              </p>
+            </div>
+          );
+        })}
       </div>
-    </div>
+    </div >
   )
 }
 
