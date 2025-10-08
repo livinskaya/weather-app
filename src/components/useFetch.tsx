@@ -48,7 +48,7 @@ const useFetch = <T,>(props: FetchProps | null) => {
         };
         getData();
     }, [props])
-
+    //generisch
     return { data, loading, error }
 }
 
