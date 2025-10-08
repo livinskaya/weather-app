@@ -48,10 +48,7 @@ const useFetch = <T,>(props: FetchProps | null) => {
         };
         getData();
     }, [props])
-    //generisch
     return { data, loading, error }
 }
 
 export default useFetch
-
-// async loading, ref try catch function drin schreiben

@@ -56,7 +56,7 @@ const App = () => {
     <div className='flex flex-col items-center justify-center bg-linear-to-r from-blue-200 to-blue-400 h-screen text-center'>
       <div className='text-white text-shadow-md'>
         <h1 className='text-2xl'>Oldenburg</h1>
-        <p className='text-5xl'>{temperature}</p>
+        <p className='text-5xl'>{temperature}°</p>
         <p className=''>{currentWeather?.text}</p>
       </div>
       <div className='flex w-125 bg-gray-100/20 rounded-[20px] overflow-x-scroll m-5 p-5' >
@@ -74,7 +74,7 @@ const App = () => {
               <p>{todayWeather.icon}</p>
 
               <p className='text-lg text-white'>
-                {Math.round(data.hourly.temperature_2m[index])}
+                {Math.round(data.hourly.temperature_2m[index])}°
               </p>
             </div>
           );
