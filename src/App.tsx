@@ -35,7 +35,7 @@ const App = () => {
           latitude: location?.latitude,
           longitude: location?.longitude,
           hourly: ["temperature_2m", "weather_code"],
-          current: ["temperature_2m", "weather_code"]
+          current: ["temperature_2m", "weather_code"],
         }
 
       }

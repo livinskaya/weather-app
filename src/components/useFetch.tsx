@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react"
 
 
-interface FetchProps<Params extends Record<string, unknown>> {
+interface FetchProps<Params extends Record<string, ParamValueType>> {
     url: string;
     params?: Params;
 }
+type ParamValueType = string | number | boolean | Array<string | number | boolean>
 
-const buildURLString = (params: Record<string, unknown>) => {
+const buildURLString = (params: Record<string, ParamValueType>) => {
     const url = new URLSearchParams();
 
     Object.entries(params).forEach(([key, value]) => {
@@ -19,21 +20,21 @@ const buildURLString = (params: Record<string, unknown>) => {
     return url.toString()
 }
 
-const useFetch = <Data, Params extends Record<string, unknown> = Record<string, unknown>>(
+const useFetch = <Data, Params extends Record<string, ParamValueType> = Record<string, ParamValueType>>(
     props: FetchProps<Params> | null
 ) => {
     const [data, setData] = useState<Data | null>(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<unknown>(null)
+    const [error, setError] = useState<Error>()
 
     useEffect(() => {
         if (!props) return;
 
         const { url, params } = props;
 
-        const getData = async () => {
+        const fetchData = async () => {
             setLoading(true);
-            setError(null);
+            setError(undefined);
             try {
                 const URLString = params ? `?${buildURLString(params)}` : "";
                 const response = await fetch(`${url}${URLString}`);
@@ -44,13 +45,17 @@ const useFetch = <Data, Params extends Record<string, unknown> = Record<string, 
                 const json = (await response.json()) as Data;
                 setData(json)
             } catch (error) {
-                setError(error);
+                if (error instanceof Error) {
+                    setError(error);
+                    return;
+                }
+                console.error(error)
             } finally {
                 setLoading(false);
             }
 
         };
-        getData().catch((error) => console.log(error));
+        fetchData().catch((error) => console.log(error));
     }, [props])
     return { data, loading, error }
 }
