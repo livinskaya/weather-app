@@ -1,52 +1,56 @@
 import { useEffect, useState } from "react"
 
 
-interface RequestParams {
-    longitude: number;
-    latitude: number;
-    hourly: string[];
-}
-
-interface FetchProps {
+interface FetchProps<Params extends Record<string, unknown>> {
     url: string;
-    options: RequestParams;
+    params?: Params;
 }
 
+const buildURLString = (params: Record<string, unknown>) => {
+    const url = new URLSearchParams();
 
+    Object.entries(params).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+            url.append(key, value.join(","))
+        } else if (value !== undefined && value !== null && (typeof value === "string" || typeof value === "number" || typeof value === "boolean")) {
+            url.append(key, String(value));
+        }
+    });
+    return url.toString()
+}
 
-const useFetch = <T,>(props: FetchProps | null) => {
-    const [data, setData] = useState<T | null>(null);
+const useFetch = <Data, Params extends Record<string, unknown> = Record<string, unknown>>(
+    props: FetchProps<Params> | null
+) => {
+    const [data, setData] = useState<Data | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<unknown>(null)
 
     useEffect(() => {
         if (!props) return;
 
-        const { url, options } = props;
-        const hourlyParams = options.hourly.join(",");
-        const currentParams = "temperature_2m,weather_code";
+        const { url, params } = props;
 
         const getData = async () => {
             setLoading(true);
-            setError(undefined);
+            setError(null);
             try {
-                const response = await fetch(`${url}?latitude=${options.latitude}&longitude=${options.longitude}&hourly=${hourlyParams}&current=${currentParams}`)
-
-                console.log(response)
+                const URLString = params ? `?${buildURLString(params)}` : "";
+                const response = await fetch(`${url}${URLString}`);
 
                 if (!response.ok) {
                     throw new Error(`Error: ${response.status}`)
                 }
-                const enddata: T = await response.json();
-                setData(enddata)
-            } catch (error: unknown) {
+                const json = (await response.json()) as Data;
+                setData(json)
+            } catch (error) {
                 setError(error);
             } finally {
                 setLoading(false);
             }
 
         };
-        getData();
+        getData().catch((error) => console.log(error));
     }, [props])
     return { data, loading, error }
 }

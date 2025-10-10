@@ -1,5 +1,5 @@
 
-export const getDescription = (weatherCode: number): { text: string; icon: string } => {
+export const getDescription = (weatherCode?: number): { text: string; icon: string } => {
     const status: { [key: number]: { text: string; icon: string } } = {
         0: { text: "Clear Sky", icon: "🌤️" },
         1: { text: "Mainly clear, partly cloudly and overcast", icon: "⛅️" },
@@ -31,5 +31,5 @@ export const getDescription = (weatherCode: number): { text: string; icon: strin
         99: { text: "Heavy thunderstorm with hail", icon: "🌩️" },
     }
 
-    return status[weatherCode] || { text: "Unknown", icon: "?" };
+    return status[weatherCode ?? -1] || { text: "Unknown", icon: "?" };
 }
