@@ -70,37 +70,6 @@ const App = () => {
         <p className='text-5xl'>{temperature}°</p>
         <p className=''>{currentWeather?.text}</p>
       </div>
-      <div className='flex w-125 bg-gray-100/20 rounded-[20px] overflow-x-scroll m-5 p-5' >
-        {data?.hourly?.time.length ? (
-          (() => {
-            const now = new Date()
-            const currentHourIndex = data.hourly.time.findIndex(time => new Date(time) >= now)
-            const hourlySlice = data.hourly.time.slice(currentHourIndex, currentHourIndex + 12)
-
-            return hourlySlice.map((time, index) => {
-              const indx = currentHourIndex + index;
-              const todayWeather = getDescription(data.hourly.weather_code[indx]);
-
-              return (
-                < div
-                  key={time}
-                  className="inline-block flex-shrink-0 w-[50px] text-center mr-5"
-                >
-                  <p className='text-sm text-white'>
-                    {index === 0 ? 'Now' : new Date(time).getHours() + ' Uhr'}
-                  </p>
-                  <p>{todayWeather.icon}</p>
-
-                  <p className='text-lg text-white'>
-                    {Math.round(data.hourly.temperature_2m[index] ?? 0)}°
-                  </p>
-                </div>
-              );
-            });
-          })()
-        ) : (<p>Keine Stündlichen Daten verfügbar</p>
-        )}
-      </div>
       <div className='flex flex-col bg-gray-100/20 w-125 rounded-[20px]'>
         {data?.daily?.time.length ? (
           data.daily.time.slice(0, 7).map((time, index) => {
