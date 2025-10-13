@@ -103,29 +103,24 @@ const App = () => {
       </div>
       <div className='flex flex-col bg-gray-100/20 w-125 rounded-[20px]'>
         {data?.daily?.time.length ? (
-          (() => {
-            const today = new Date()
-            const currentDayIndex = data.daily.time.findIndex(time => new Date(time) >= today);
-            const dailySlice = data.hourly.time.slice(currentDayIndex, currentDayIndex + 7)
-            return dailySlice.map((time, index) => {
-              const indx = currentDayIndex + index
-              const weekWeather = getDescription(data.daily.weather_code[indx]);
-              return (
-                <div className="flex gap-10">
-                  <p>{index === 0 ? "Today" : new Date(time).getMonth()}</p>
-                  <p>{weekWeather.icon}</p>
-                  <p>{data.daily.temperature_2m_min[index]}</p>
-                  <p>{data.daily.temperature_2m_max[index]}</p>
-                </div>
-              );
-            });
-          })()
+          data.daily.time.slice(0, 7).map((time, index) => {
+            const date = new Date(time)
+            const dayName = date.toLocaleDateString('en-EN', { weekday: 'long' })
+            const weather = getDescription(data.daily.weather_code[index])
+
+            return (
+              <div className="grid grid-cols-4 text-white">
+                <p className="text-left pl-2">{index === 0 ? "Today" : dayName}</p>
+                <p>{weather.icon}</p>
+                <p>{data.daily.temperature_2m_min[index]}°</p>
+                <p className=''>{data.daily.temperature_2m_max[index]}°</p>
+              </div>
+            );
+          })
         ) : (<p className="text-white">Keine 7 Tägliche Daten verfügbar</p>
 
         )}
       </div>
-
-
 
     </div >
   )
