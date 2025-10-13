@@ -57,6 +57,7 @@ const useFetch = <Data, Params extends Record<string, ParamValueType> = Record<s
         };
         fetchData().catch((error) => console.log(error));
     }, [props])
+    console.log(data)
     return { data, loading, error }
 }
 

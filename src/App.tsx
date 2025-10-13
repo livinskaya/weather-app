@@ -24,7 +24,7 @@ const App = () => {
 
   interface WeatherResponse {
     forecast_days: number[];
-    daily: { weather_code: number[], temperature_2m_max: number[], temperature_2m_min: number[] };
+    daily: { time: string[], weather_code: number[], temperature_2m_max: number[], temperature_2m_min: number[] };
     current: { temperature_2m: number; weather_code: number };
     hourly: { time: string[]; temperature_2m: number[]; weather_code: number[] };
   }
@@ -101,19 +101,27 @@ const App = () => {
         ) : (<p>Keine Stündlichen Daten verfügbar</p>
         )}
       </div>
-      <div className='bg-gray-100/20 w-125 rounded-[20px]'>
-        {data?.forecast_days.length ? (
+      <div className='flex flex-col bg-gray-100/20 w-125 rounded-[20px]'>
+        {data?.daily?.time.length ? (
           (() => {
-            const forecastData = data.forecast_days,
-            return forecastData.map((index) => {
-              const weekWeather = getDescription(data.forecast_days.)
-
+            const today = new Date()
+            const currentDayIndex = data.daily.time.findIndex(time => new Date(time) >= today);
+            const dailySlice = data.hourly.time.slice(currentDayIndex, currentDayIndex + 7)
+            return dailySlice.map((time, index) => {
+              const indx = currentDayIndex + index
+              const weekWeather = getDescription(data.daily.weather_code[indx]);
               return (
-                
+                <div className="flex gap-10">
+                  <p>{index === 0 ? "Today" : new Date(time).getMonth()}</p>
+                  <p>{weekWeather.icon}</p>
+                  <p>{data.daily.temperature_2m_min[index]}</p>
+                  <p>{data.daily.temperature_2m_max[index]}</p>
+                </div>
               );
             });
           })()
-        ) : (<p>Keine Stündlichen Daten verfügbar</p>
+        ) : (<p className="text-white">Keine 7 Tägliche Daten verfügbar</p>
+
         )}
       </div>
 
