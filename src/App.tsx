@@ -5,6 +5,8 @@ import { getCurrentLocation } from './components/getCurrentLocation';
 import { useEffect, useState } from 'react';
 import { StateLoading } from './components/stateLoading';
 import { StateError } from './components/stateError';
+import { ForecastDaily } from './components/forecastDaily';
+import { ForecastHourly } from './components/forecastHourly';
 
 interface Location {
   latitude: number;
@@ -70,26 +72,22 @@ const App = () => {
         <p className='text-5xl'>{temperature}°</p>
         <p className=''>{currentWeather?.text}</p>
       </div>
-      <div className='flex flex-col bg-gray-100/20 w-125 rounded-[20px]'>
-        {data?.daily?.time.length ? (
-          data.daily.time.slice(0, 7).map((time, index) => {
-            const date = new Date(time)
-            const dayName = date.toLocaleDateString('en-EN', { weekday: 'long' })
-            const weather = getDescription(data.daily.weather_code[index])
+      {data && (
+        <div>
+          <ForecastHourly
+            time={data?.hourly.time}
+            temperature={data.hourly.temperature_2m}
+            weather_code={data.hourly.weather_code}
+          />
 
-            return (
-              <div className="grid grid-cols-4 text-white">
-                <p className="text-left pl-2">{index === 0 ? "Today" : dayName}</p>
-                <p>{weather.icon}</p>
-                <p>{data.daily.temperature_2m_min[index]}°</p>
-                <p className=''>{data.daily.temperature_2m_max[index]}°</p>
-              </div>
-            );
-          })
-        ) : (<p className="text-white">Keine 7 Tägliche Daten verfügbar</p>
-
-        )}
-      </div>
+          <ForecastDaily
+            time={data.daily.time}
+            minTemp={data.daily.temperature_2m_min}
+            maxTemp={data.daily.temperature_2m_max}
+            weather_code={data.daily.weather_code}
+          />
+        </div>
+      )}
 
     </div >
   )
