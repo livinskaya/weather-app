@@ -7,29 +7,67 @@ import { StateLoading } from './components/stateLoading';
 import { StateError } from './components/stateError';
 import { ForecastDaily } from './components/forecastDaily';
 import { ForecastHourly } from './components/forecastHourly';
+import { SearchBar } from './components/searchBar';
 
 interface Location {
   latitude: number;
   longitude: number;
+  name?: string
+}
+interface WeatherResponse {
+  forecast_days: number[];
+  daily: { time: string[], weather_code: number[], temperature_2m_max: number[], temperature_2m_min: number[] };
+  current: { temperature_2m: number; weather_code: number };
+  hourly: { time: string[]; temperature_2m: number[]; weather_code: number[] };
+}
+
+interface MapResponse {
+  results?: {
+    name: string;
+    latitude: number;
+    longitude: number;
+    country: string;
+  }[];
 }
 
 const App = () => {
   const [location, setLocation] = useState<Location | null>(null);
+  const [searchCity, setSearchCity] = useState<string | null>(null);
 
   useEffect(() => {
     getCurrentLocation()
-      .then(setLocation)
+      .then((position => setLocation(position)))
       .catch((error) => {
         console.error("Unknown location", error)
       })
   }, [])
 
-  interface WeatherResponse {
-    forecast_days: number[];
-    daily: { time: string[], weather_code: number[], temperature_2m_max: number[], temperature_2m_min: number[] };
-    current: { temperature_2m: number; weather_code: number };
-    hourly: { time: string[]; temperature_2m: number[]; weather_code: number[] };
-  }
+  const { data: mapData } = useFetch<MapResponse>(
+    searchCity ? {
+      url: "https://geocoding-api.open-meteo.com/v1/search",
+      params: {
+        name: searchCity,
+        count: 1,
+        language: "en",
+        format: "json"
+      }
+    }
+      : null
+  )
+
+  useEffect(() => {
+    if (mapData?.results && mapData.results.length > 0) {
+      const city = mapData.results[0];
+      setLocation({
+        latitude: city?.latitude ?? 0,
+        longitude: city?.longitude ?? 0,
+        name: `${city?.name}, ${city?.country}`
+      })
+    } else {
+      console.error("Ungültige locaion")
+    }
+
+  }, [mapData])
 
   const { data, loading, error } = useFetch<WeatherResponse>(
     location
@@ -67,8 +105,9 @@ const App = () => {
 
 
     <div className='flex flex-col items-center justify-center bg-linear-to-r from-blue-200 to-blue-400 h-screen text-center'>
+      <SearchBar onSearch={setSearchCity} />
       <div className='text-white text-shadow-md'>
-        <h1 className='text-2xl'>Oldenburg</h1>
+        <h1 className='text-2xl'>{location?.name ?? "Oldenburg"}</h1>
         <p className='text-5xl'>{temperature}°</p>
         <p className=''>{currentWeather?.text}</p>
       </div>

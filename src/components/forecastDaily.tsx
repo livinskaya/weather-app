@@ -1,13 +1,13 @@
 import { getDescription } from "./getDescription";
 
-interface ForecastDailyProps {
+interface ForecastDailyParams {
     time: string[];
     minTemp: number[];
     maxTemp: number[];
     weather_code: number[];
 }
 
-export const ForecastDaily = ({ time, minTemp, maxTemp, weather_code }: ForecastDailyProps) => {
+export const ForecastDaily = ({ time, minTemp, maxTemp, weather_code }: ForecastDailyParams) => {
     if (!time || time.length === 0) {
         return <p className="text-white p-2">Keine 7 Tägige Daten gefunden</p>
     }
