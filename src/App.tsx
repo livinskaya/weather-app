@@ -23,6 +23,8 @@ const App = () => {
   }, [])
 
   interface WeatherResponse {
+    forecast_days: number[];
+    daily: { weather_code: number[], temperature_2m_max: number[], temperature_2m_min: number[] };
     current: { temperature_2m: number; weather_code: number };
     hourly: { time: string[]; temperature_2m: number[]; weather_code: number[] };
   }
@@ -34,6 +36,8 @@ const App = () => {
         params: {
           latitude: location?.latitude,
           longitude: location?.longitude,
+          forecast_days: 7,
+          daily: ["temperature_2m_max", "temperature_2m_min", "weather_code"],
           hourly: ["temperature_2m", "weather_code"],
           current: ["temperature_2m", "weather_code"],
         }
@@ -41,7 +45,6 @@ const App = () => {
       }
       : null
   )
-
   const temperature = data?.current.temperature_2m
   const get_currentWeather = data?.current.weather_code
   const currentWeather = get_currentWeather !== undefined ? getDescription(get_currentWeather) : null;
@@ -59,6 +62,7 @@ const App = () => {
   }
 
   return (
+
 
     <div className='flex flex-col items-center justify-center bg-linear-to-r from-blue-200 to-blue-400 h-screen text-center'>
       <div className='text-white text-shadow-md'>
@@ -97,6 +101,24 @@ const App = () => {
         ) : (<p>Keine Stündlichen Daten verfügbar</p>
         )}
       </div>
+      <div className='bg-gray-100/20 w-125 rounded-[20px]'>
+        {data?.forecast_days.length ? (
+          (() => {
+            const forecastData = data.forecast_days,
+            return forecastData.map((index) => {
+              const weekWeather = getDescription(data.forecast_days.)
+
+              return (
+                
+              );
+            });
+          })()
+        ) : (<p>Keine Stündlichen Daten verfügbar</p>
+        )}
+      </div>
+
+
+
     </div >
   )
 }
