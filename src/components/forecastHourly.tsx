@@ -16,12 +16,12 @@ export const ForecastHourly = ({ time, temperature, weather_code }: ForecastHour
     const hourlySlice = time.slice(currentHourIndex, currentHourIndex + 12)
 
     return (
-        <div className="flex w-125 bg-gray-100/20 rounded-[20px] overflow-x-scroll m-5 p-5">
+        <div className="flex w-125 bg-gray-100/20 rounded-[20px] overflow-x-scroll m-5 p-5 snap-x snap-proximity">
             {hourlySlice.map((t, index) => {
                 const indx = currentHourIndex + index;
                 const desc = getDescription(weather_code[indx]);
                 return (
-                    <div key={t} className="inline-block flex-shrink-0 w-[50px] text-center mr-5">
+                    <div key={t} className="inline-block flex-shrink-0 w-[50px] text-center mr-5 snap-center">
                         <p className="text-sm text-white"> {index === 0 ? "Now" : new Date(t).getHours() + " Uhr"}</p>
                         <p>{desc.icon}</p>
                         <p className="text-lg text-white">{temperature[indx]}°</p>
