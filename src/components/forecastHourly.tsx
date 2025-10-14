@@ -30,4 +30,5 @@ export const ForecastHourly = ({ time, temperature, weather_code }: ForecastHour
             })}
         </div>
     )
-} 
+}
+

@@ -1,0 +1,10 @@
+@font-face {
+    font-family: Pixel;
+    src: url("../src/assets/fonts/pixel.ttf")
+}
+
+@import "tailwindcss";
+
+@theme {
+    --font-pixel: Pixel
+}
