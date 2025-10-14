@@ -14,10 +14,18 @@ export const themes = {
 
     pixel: {
         name: "Pixel",
-        fontClass: "pixel",
+        fontClass: "font-pixel",
         icons: {
+            sunny: "",
+            cloudy: "",
+            rain: "",
+            snow: "",
+            thunder: "",
+            fog: ""
+        },
+    },
 
-        }
 
-    }
+
+
 }

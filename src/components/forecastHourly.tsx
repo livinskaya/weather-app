@@ -24,7 +24,7 @@ export const ForecastHourly = ({ time, temperature, weather_code }: ForecastHour
                     <div key={t} className="inline-block flex-shrink-0 w-[50px] text-center mr-5 snap-center">
                         <p className="text-sm text-white"> {index === 0 ? "Now" : new Date(t).getHours() + " Uhr"}</p>
                         <p>{desc.icon}</p>
-                        <p className="text-lg text-white">{temperature[indx]}°</p>
+                        <p className="text-md text-white">{temperature[indx]}°</p>
                     </div>
                 )
             })}

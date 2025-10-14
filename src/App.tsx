@@ -8,6 +8,7 @@ import { StateError } from './components/stateError';
 import { ForecastDaily } from './components/forecastDaily';
 import { ForecastHourly } from './components/forecastHourly';
 import { SearchBar } from './components/searchBar';
+import { ThemeSwitch } from './components/themeSwitch';
 
 interface Location {
   latitude: number;
@@ -105,6 +106,7 @@ const App = () => {
 
 
     <div className='flex flex-col items-center justify-center bg-linear-to-r from-blue-200 to-blue-400 h-screen text-center'>
+      <ThemeSwitch />
       <SearchBar onSearch={setSearchCity} />
       <div className='text-white text-shadow-md'>
         <h1 className='text-2xl'>{location?.name ?? "Oldenburg"}</h1>
